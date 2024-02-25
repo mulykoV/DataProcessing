@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import crud.Lab2CrudInterface;
 import entity.Entity;
 /**
 * Servlet implementation class Servlet1
@@ -14,6 +15,15 @@ import entity.Entity;
 @WebServlet("/Servlet1")
 public class Servlet1 extends HttpServlet {
 private static final long serialVersionUID = 1L;
+
+ServletConfigInterface servletConfig;
+Lab2CrudInterface lab2Crud;
+
+public Servlet1() {
+	super();
+	this.servletConfig = new ServletConfig();
+	this.lab2Crud = servletConfig.getCrud();
+}
 /**
 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 */
@@ -23,8 +33,14 @@ ServletException, IOException {
 	response.setContentType("application/json");
 	
 	PrintWriter out = response.getWriter();
+	out.println("["+lab2Crud.readEntity()+"]");
+}
+
+protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+	String title = request.getParameter("title");
+	int age = Integer.parseInt(request.getParameter("age"));
+	float width = Float.parseFloat(request.getParameter("width"));
 	
-	Entity entity = new Entity("Entity1", 18, 1.81f);
-	out.println("["+entity+"]");
+	lab2Crud.updateEntity(new Entity(title, age, width));
 }
 }
